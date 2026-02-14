@@ -26,4 +26,9 @@ app.use("/api/transcripts", transcriptRoutes);
 app.use("/api/items", itemRoutes);
 app.use("/api/health", healthRoutes);
 
-app.listen(4000, () => console.log("Server running on 4000"));
+const PORT = process.env.PORT || 4000;
+
+app.listen(PORT, () => {
+  console.log(`Server running on ${PORT}`);
+});
+
