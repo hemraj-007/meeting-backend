@@ -8,17 +8,24 @@ import healthRoutes from "./routes/health.routes";
 dotenv.config();
 
 const app = express();
-const allowedOrigins = process.env.CORS_ORIGIN?.split(",") || [
-  "http://localhost:5173",
-  "http://127.0.0.1:5173",
-];
+const allowedOrigins =
+  process.env.CORS_ORIGIN?.split(",") ?? [];
 
 app.use(
   cors({
-    origin: allowedOrigins,
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true);
+
+      if (allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     credentials: true,
   })
 );
+
 
 app.use(express.json());
 
