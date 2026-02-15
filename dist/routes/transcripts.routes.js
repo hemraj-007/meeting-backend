@@ -5,5 +5,6 @@ const transcript_controller_1 = require("../controllers/transcript.controller");
 const router = (0, express_1.Router)();
 router.post("/", transcript_controller_1.processTranscript);
 router.get("/", transcript_controller_1.getTranscriptHistory); // 👈 history
+router.delete("/:id", transcript_controller_1.deleteTranscript);
 exports.default = router;
 //# sourceMappingURL=transcripts.routes.js.map

@@ -39,3 +39,24 @@ export async function getTranscriptHistory(req: Request, res: Response) {
 
   res.json(transcripts);
 }
+
+export async function deleteTranscript(req: Request, res: Response) {
+  const id = req.params.id;
+
+  if (typeof id !== "string")
+    return res.status(400).json({ error: "id required" });
+
+  try {
+    await prisma.transcript.delete({
+      where: { id }
+    });
+  } catch (e: unknown) {
+    const code = e && typeof e === "object" && "code" in e ? (e as { code: string }).code : null;
+    if (code === "P2025") {
+      return res.status(404).json({ error: "Transcript not found" });
+    }
+    throw e;
+  }
+
+  res.json({ success: true });
+}

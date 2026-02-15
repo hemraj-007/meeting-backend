@@ -39,9 +39,18 @@ async function updateItem(req, res) {
     const id = req.params.id;
     if (typeof id !== "string")
         return res.status(400).json({ error: "id required" });
+    const { tags, completed, task, owner, dueDate } = req.body;
     const item = await prisma_1.default.actionItem.update({
         where: { id },
-        data: req.body
+        data: {
+            ...(completed !== undefined && { completed }),
+            ...(task !== undefined && { task }),
+            ...(owner !== undefined && { owner }),
+            ...(dueDate !== undefined && { dueDate }),
+            ...(tags !== undefined && {
+                tags: { set: tags } // ✅ THIS FIXES SINGLE TAG DELETE
+            })
+        }
     });
     res.json(item);
 }
